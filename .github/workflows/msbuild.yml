@@ -32,7 +32,7 @@ jobs:
           choco install wget innoextract --no-progress
 
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: 2
 
@@ -75,7 +75,7 @@ jobs:
           ls -Recurse -Exclude ".git,debian" -Path  "${{ runner.workspace }}/pthread-win32" 
         
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
 
     - name: libusb Configure Visual Studio and CMake
       working-directory: ${{runner.workspace}}/libusb
@@ -101,7 +101,7 @@ jobs:
         mkdir ${{github.workspace}}/build
         ## cd ${{github.workspace}}/build
         ls
-        cmake -B build_rtl-sdr -S . -A x64 -DCMAKE_BUILD_TYPE=Release --fresh `
+        cmake -B build_rtl-sdr -S . -A x64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} --fresh `
               -DLIBUSB_LIBRARIES=${{runner.workspace}}/libusb/build/v143/x64/Release/dll/libusb-1.0.lib `
               -DLIBUSB_PKG_LIBRARY_DIRS=${{runner.workspace}}/libusb/build/v143/x64/Release/dll/libusb-1.0.lib  `
               -DLIBUSB_INCLUDE_DIRS=${{runner.workspace}}/libusb/libusb `
@@ -171,7 +171,7 @@ jobs:
 
 
     - name: package and upload
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: dl8aau_librtlsdr_x64_dist
         path: |
